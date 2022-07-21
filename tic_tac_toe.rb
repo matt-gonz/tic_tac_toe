@@ -12,45 +12,46 @@ class TicTacToe
   end
 
   # places character in specified grid cell 1-9
-  def place_char(char, cell)
-    if cell >= 1 && cell <= 3
-      row = 0
-      cell_adjustment = 1
-    elsif cell >= 4 && cell <= 6
-      row = 1
-      cell_adjustment = 4
-    elsif cell >= 7 && cell <= 9
-      row = 2
-      cell_adjustment = 7
+  def place_char(char, cell, row, row_adjustment)
+    if row_adjustment
+      @@grid[row][cell-row_adjustment] = char
+      display_grid
     else
       puts "Invalid input. Please select a value 1-9."
       return
     end
-
-    @@grid[row][cell-cell_adjustment] = char
-    display_grid
   end
 
-  def cell_played?(cell)
-    if cell >= 1 && cell <= 3
-      row = 0
-      cell_adjustment = 1
-    elsif cell >= 4 && cell <= 6
-      row = 1
-      cell_adjustment = 4
-    elsif cell >= 7 && cell <= 9
-      row = 2
-      cell_adjustment = 7
+  # check if cell has already been played
+  def cell_played?(cell, row, row_adjustment)
+    if row_adjustment
+      selected_cell = @@grid[row][cell-row_adjustment]
+      if selected_cell == "_"
+        return false
+      else 
+        return true
+      end
     else
       return "invalid"
     end
+  end
 
-    selected_cell = @@grid[row][cell-cell_adjustment]
-    if selected_cell == "_"
-      return false
-    else 
-      return true
+  # get row offset depending of cell selection
+  def get_row_adjustment(cell)
+    if cell >= 1 && cell <= 3
+      row = 0
+      row_adjustment = 1
+    elsif cell >= 4 && cell <= 6
+      row = 1
+      row_adjustment = 4
+    elsif cell >= 7 && cell <= 9
+      row = 2
+      row_adjustment = 7
+    else
+      return nil
     end
+
+    return [row, row_adjustment]
   end
 
   # display current grid state, neatly formatted
@@ -66,6 +67,7 @@ class TicTacToe
     puts ["", "----------", ""]
   end
 
+  # add player to @players instance var
   def add_player(is_player2 = false)
     if is_player2 == false
       puts "Player 1, please input your name: "
@@ -105,7 +107,7 @@ class TicTacToe
       selected_cell = get_player_cell_input(@players[0])
       loop do 
         if selected_cell != nil && selected_cell != "invalid"
-          place_char(@players[0].character, selected_cell)
+          place_char(@players[0].character, selected_cell[0], selected_cell[1], selected_cell[2])
           turn_count += 1
           break
         elsif selected_cell == "invalid"
@@ -127,7 +129,7 @@ class TicTacToe
       selected_cell = get_player_cell_input(@players[1])
       loop do 
         if selected_cell != nil && selected_cell != "invalid"
-          place_char(@players[1].character, selected_cell)
+          place_char(@players[1].character, selected_cell[0], selected_cell[1], selected_cell[2])
           turn_count += 1
           break
         elsif selected_cell == "invalid"
@@ -155,10 +157,11 @@ class TicTacToe
       puts message
     end
     cell = gets.chomp().to_i
-    cell_played = cell_played?(cell)
+    row_adjust = get_row_adjustment(cell)
+    cell_played = cell_played?(cell, row_adjust[0], row_adjust[1])
     # only return selected cell if it has not already been played
     if cell_played == false
-      return cell
+      return [cell, row_adjust[0], row_adjust[1]]
     elsif cell_played == "invalid"
       return "invalid"
     else
