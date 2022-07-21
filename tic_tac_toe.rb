@@ -3,6 +3,7 @@ class TicTacToe
 
   def initialize
     @players = []
+    @current_player = @players[0]
   end
 
   # create blank grid and calls display_grid method
@@ -99,23 +100,24 @@ class TicTacToe
   def start_game
     add_player
     add_player(isPlayer2=true)
+    @current_player = @players[0]
     create_grid
     no_winner = true
     turn_count = 0
     loop do
       # player1's turn 
-      selected_cell = get_player_cell_input(@players[0])
+      selected_cell = get_player_cell_input(@current_player)
       loop do 
         if selected_cell != nil && selected_cell != "invalid"
-          place_char(@players[0].character, selected_cell[0], selected_cell[1], selected_cell[2])
+          place_char(@current_player.character, selected_cell[0], selected_cell[1], selected_cell[2])
           turn_count += 1
           break
         elsif selected_cell == "invalid"
           message = "Invalid input. Please select a value 1-9."
-          selected_cell = get_player_cell_input(@players[0], message)
+          selected_cell = get_player_cell_input(@current_player, message)
         else
           message = "Cell has already been played. Please select another cell 1-9."
-          selected_cell = get_player_cell_input(@players[0], message)
+          selected_cell = get_player_cell_input(@current_player, message)
         end
       end
         
@@ -125,27 +127,34 @@ class TicTacToe
         break if no_winner == false
       end
 
-      # player2's turn 
-      selected_cell = get_player_cell_input(@players[1])
-      loop do 
-        if selected_cell != nil && selected_cell != "invalid"
-          place_char(@players[1].character, selected_cell[0], selected_cell[1], selected_cell[2])
-          turn_count += 1
-          break
-        elsif selected_cell == "invalid"
-          message = "Invalid input. Please select a value 1-9."
-          selected_cell = get_player_cell_input(@players[1], message)
-        else
-          message = "Cell has already been played. Please select another cell 1-9."
-          selected_cell = get_player_cell_input(@players[1], message)
-        end
-      end
-
-      if turn_count >= 5
-        no_winner = check_for_winner
-        break if no_winner == false
-      end
+      switch_player
     end
+
+    #   # player2's turn 
+    #   selected_cell = get_player_cell_input(@players[1])
+    #   loop do 
+    #     if selected_cell != nil && selected_cell != "invalid"
+    #       place_char(@players[1].character, selected_cell[0], selected_cell[1], selected_cell[2])
+    #       turn_count += 1
+    #       break
+    #     elsif selected_cell == "invalid"
+    #       message = "Invalid input. Please select a value 1-9."
+    #       selected_cell = get_player_cell_input(@players[1], message)
+    #     else
+    #       message = "Cell has already been played. Please select another cell 1-9."
+    #       selected_cell = get_player_cell_input(@players[1], message)
+    #     end
+    #   end
+
+    #   if turn_count >= 5
+    #     no_winner = check_for_winner
+    #     break if no_winner == false
+    #   end
+    # end
+  end
+
+  def switch_player
+    @current_player = @current_player == @players[0] ? @players[1] : @players[0]
   end
 
   def get_player_cell_input(player = @players[0], message = "")
@@ -183,7 +192,7 @@ class TicTacToe
     elsif diagonal_win.all? {|c| c == @players[0].character}
       puts "#{@players[0].name} won diagonally!"
       no_winner = false
-    elsif backwards_backwards_diagonal_win.all? {|c| c == @players[0].character}
+    elsif backwards_diagonal_win.all? {|c| c == @players[0].character}
       puts "#{@players[0].name} won backwards diagonally!"
       no_winner = false
     elsif left_vertical_win.all? {|c| c == @players[0].character}
