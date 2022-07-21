@@ -49,7 +49,15 @@ class TicTacToe
       puts "Player 1, please input your name: "
       name = gets.chomp()
       puts "Welcome #{name}, please select either X or O: "
-      character = gets.chomp() 
+      character = gets.chomp().capitalize()
+      loop do
+        if character == "X" || character == "O"
+          break
+        else
+          puts "Invalid input. Please select either X or O: "
+          character = gets.chomp().capitalize()
+        end
+      end
     else
       puts "Player 2, please input your name: "
       name = gets.chomp()
