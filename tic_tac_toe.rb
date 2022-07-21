@@ -180,19 +180,19 @@ class TicTacToe
     if (@@grid[0].all? {|c| c == @players[0].character} || @@grid[1].all? {|c| c == @players[0].character} || @@grid[2].all? {|c| c == @players[0].character})
       puts "#{@players[0].name} won!"
       no_winner = false
-    elsif diagonal_win.all? {|c| c != "_"} && diagonal_win.all? {|c| c == @players[0].character}
+    elsif diagonal_win.all? {|c| c == @players[0].character}
       puts "#{@players[0].name} won diagonally!"
       no_winner = false
-    elsif backwards_diagonal_win.all? {|c| c != "_"} && backwards_diagonal_win.all? {|c| c == @players[0].character}
+    elsif backwards_backwards_diagonal_win.all? {|c| c == @players[0].character}
       puts "#{@players[0].name} won backwards diagonally!"
       no_winner = false
-    elsif left_vertical_win.all? {|c| c!= "_"} && left_vertical_win.all? {|c| c == @players[0].character}
+    elsif left_vertical_win.all? {|c| c == @players[0].character}
       puts "#{@players[0].name} won vertically!"
       no_winner = false
-    elsif center_vertical_win.all? {|c| c!= "_"} && center_vertical_win.all? {|c| c == @players[0].character}
+    elsif center_vertical_win.all? {|c| c == @players[0].character}
       puts "#{@players[0].name} won vertically!"
       no_winner = false
-    elsif right_vertical_win.all? {|c| c!= "_"} && right_vertical_win.all? {|c| c == @players[0].character}
+    elsif right_vertical_win.all? {|c| c == @players[0].character}
       puts "#{@players[0].name} won vertically!"
       no_winner = false
     end
@@ -201,19 +201,19 @@ class TicTacToe
     if (@@grid[0].all? {|c| c == @players[1].character} || @@grid[1].all? {|c| c == @players[1].character} || @@grid[2].all? {|c| c == @players[1].character})
       puts "#{@players[1].name} won!"
       no_winner = false
-    elsif diagonal_win.all? {|c| c != "_"} && diagonal_win.all? {|c| c == @players[1].character}
+    elsif diagonal_win.all? {|c| c == @players[1].character}
       puts "#{@players[1].name} won diagonally!"
       no_winner = false
-    elsif backwards_diagonal_win.all? {|c| c != "_"} && backwards_diagonal_win.all? {|c| c == @players[1].character}
+    elsif backwards_diagonal_win.all? {|c| c == @players[1].character}
       puts "#{@players[1].name} won backwards diagonally!"
       no_winner = false
-    elsif left_vertical_win.all? {|c| c!= "_"} && left_vertical_win.all? {|c| c == @players[1].character}
+    elsif left_vertical_win.all? {|c| c == @players[1].character}
       puts "#{@players[1].name} won vertically!"
       no_winner = false
-    elsif center_vertical_win.all? {|c| c!= "_"} && center_vertical_win.all? {|c| c == @players[1].character}
+    elsif center_vertical_win.all? {|c| c == @players[1].character}
       puts "#{@players[1].name} won vertically!"
       no_winner = false
-    elsif right_vertical_win.all? {|c| c!= "_"} && right_vertical_win.all? {|c| c == @players[1].character}
+    elsif right_vertical_win.all? {|c| c == @players[1].character}
       puts "#{@players[1].name} won vertically!"
       no_winner = false
     end
