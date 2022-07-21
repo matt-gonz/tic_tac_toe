@@ -90,7 +90,7 @@ class TicTacToe
 
 end
 
-class Player < TicTacToe
+class Player
   def initialize(name, character)
     @name = name
     @character = character
