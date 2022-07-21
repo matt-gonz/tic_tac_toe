@@ -31,6 +31,28 @@ class TicTacToe
     display_grid
   end
 
+  def cell_played?(cell)
+    if cell >= 1 && cell <= 3
+      row = 0
+      cell_adjustment = 1
+    elsif cell >= 4 && cell <= 6
+      row = 1
+      cell_adjustment = 4
+    elsif cell >= 7 && cell <= 9
+      row = 2
+      cell_adjustment = 7
+    else
+      return "invalid"
+    end
+
+    selected_cell = @@grid[row][cell-cell_adjustment]
+    if selected_cell == "_"
+      return false
+    else 
+      return true
+    end
+  end
+
   # display current grid state, neatly formatted
   # in three rows
   def display_grid
@@ -80,27 +102,68 @@ class TicTacToe
     turn_count = 0
     loop do
       # player1's turn 
-      puts "#{@players[0].name}, please select a cell 1-9."
-      cell_player1 = gets.chomp().to_i
-      place_char(@players[0].character, cell_player1)
-      turn_count += 1
+      selected_cell = get_player_cell_input(@players[0])
+      loop do 
+        if selected_cell != nil && selected_cell != "invalid"
+          place_char(@players[0].character, selected_cell)
+          turn_count += 1
+          break
+        elsif selected_cell == "invalid"
+          message = "Invalid input. Please select a value 1-9."
+          selected_cell = get_player_cell_input(@players[0], message)
+        else
+          message = "Cell has already been played. Please select another cell 1-9."
+          selected_cell = get_player_cell_input(@players[0], message)
+        end
+      end
+        
       # check for winner if at least 5 turns have been played
       if turn_count >= 5
         no_winner = check_for_winner
         break if no_winner == false
       end
-      # player2's turn
-      puts "#{@players[1].name}, please select a cell 1-9."
-      cell_player2 = gets.chomp().to_i
-      place_char(@players[1].character, cell_player2)
-      turn_count += 1
+
+      # player2's turn 
+      selected_cell = get_player_cell_input(@players[1])
+      loop do 
+        if selected_cell != nil && selected_cell != "invalid"
+          place_char(@players[1].character, selected_cell)
+          turn_count += 1
+          break
+        elsif selected_cell == "invalid"
+          message = "Invalid input. Please select a value 1-9."
+          selected_cell = get_player_cell_input(@players[1], message)
+        else
+          message = "Cell has already been played. Please select another cell 1-9."
+          selected_cell = get_player_cell_input(@players[1], message)
+        end
+      end
+
       if turn_count >= 5
         no_winner = check_for_winner
         break if no_winner == false
       end
-
-      break if no_winner == false
     end
+  end
+
+  def get_player_cell_input(player = @players[0], message = "")
+    name = player.name
+    character = player.character
+    if message == ""
+      puts "#{name}, please select a cell 1-9."
+    else
+      puts message
+    end
+    cell = gets.chomp().to_i
+    cell_played = cell_played?(cell)
+    # only return selected cell if it has not already been played
+    if cell_played == false
+      return cell
+    elsif cell_played == "invalid"
+      return "invalid"
+    else
+      return nil  
+    end  
   end
 
   def check_for_winner
