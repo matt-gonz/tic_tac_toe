@@ -74,6 +74,11 @@ class TicTacToe
       puts "#{@players[0].name}, please select a cell 1-9."
       cell_player1 = gets.chomp().to_i
       place_char(@players[0].character, cell_player1)
+      # logic to check for winner
+      if (@@grid[0].all? {|c| c == "X" || c == "O"} || @@grid[1].all? {|c| c == "X" || c == "O"} || @@grid[2].all? {|c| c == "X" || c == "O"})
+        no_winner = false
+        puts "There was a winner"
+      end
       # player2's turn
       puts "#{@players[1].name}, please select a cell 1-9."
       cell_player2 = gets.chomp().to_i
