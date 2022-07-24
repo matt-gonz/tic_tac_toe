@@ -205,6 +205,11 @@ class TicTacToe
       no_winner = false
     end
 
+    # check for tie
+    if @@grid[0].none? {|c| c == "_"} && @@grid[1].none? {|c| c == "_"} && @@grid[2].none? {|c| c == "_"} && no_winner == true
+      puts "It's a draw!"
+    end
+
     return no_winner
   end
 
