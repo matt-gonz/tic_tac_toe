@@ -120,7 +120,7 @@ class TicTacToe
           selected_cell = get_player_cell_input(@current_player, message)
         end
       end
-        
+
       # check for winner if at least 5 turns have been played
       if turn_count >= 5
         no_winner = check_for_winner
@@ -137,15 +137,29 @@ class TicTacToe
 
   def get_player_cell_input(player = @players[0], message = "")
     name = player.name
-    character = player.character
     if message == ""
       puts "#{name}, please select a cell 1-9."
     else
       puts message
     end
-    cell = gets.chomp().to_i
-    row_adjust = get_row_adjustment(cell)
-    cell_played = cell_played?(cell, row_adjust[0], row_adjust[1])
+    cell = nil
+    row_adjust = nil
+    cell_played = nil
+    loop do
+      cell = gets.chomp().to_i
+      row_adjust = get_row_adjustment(cell)
+      begin
+        cell_played = cell_played?(cell, row_adjust[0], row_adjust[1])
+      rescue StandardError=>e
+        puts "Invalid input!"
+        puts "Please select a cell 1-9."
+      else
+        break
+      end
+    end
+
+    puts "Cell played: #{cell_played}"
+
     # only return selected cell if it has not already been played
     if cell_played == false
       return [cell, row_adjust[0], row_adjust[1]]
