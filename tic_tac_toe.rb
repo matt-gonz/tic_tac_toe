@@ -97,9 +97,11 @@ class TicTacToe
     @players.push(Player.new(name, character))
   end
 
-  def start_game
-    add_player
-    add_player(isPlayer2=true)
+  def start_game(createPlayers = true)
+    if createPlayers
+      add_player
+      add_player(isPlayer2=true)
+    end
     @current_player = @players[0]
     create_grid
     no_winner = true
@@ -131,6 +133,16 @@ class TicTacToe
     end
   end
 
+  def restart_game
+    puts "Would you like to play again? (Y/N)"
+    decision = gets.chomp().capitalize
+    if decision == "Y" || decision == "Yes"
+      start_game(false)
+    else
+      exit
+    end
+  end
+
   def switch_player
     @current_player = @current_player == @players[0] ? @players[1] : @players[0]
   end
@@ -157,9 +169,6 @@ class TicTacToe
         break
       end
     end
-
-    puts "Cell played: #{cell_played}"
-
     # only return selected cell if it has not already been played
     if cell_played == false
       return [cell, row_adjust[0], row_adjust[1]]
@@ -222,9 +231,12 @@ class TicTacToe
     # check for tie
     if @@grid[0].none? {|c| c == "_"} && @@grid[1].none? {|c| c == "_"} && @@grid[2].none? {|c| c == "_"} && no_winner == true
       puts "It's a draw!"
+      no_winner = nil
     end
 
-    return no_winner
+    if no_winner == false || no_winner == nil
+      restart_game
+    end
   end
 
 end
